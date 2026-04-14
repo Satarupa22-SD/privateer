@@ -1,11 +1,15 @@
 package cmd
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"gopkg.in/yaml.v3"
 
 	"github.com/privateerproj/privateer-sdk/command"
 )
@@ -26,10 +30,31 @@ When everything is battoned down, it is time to run forth.`,
 	c.rootCmd.AddCommand(runCmd)
 }
 
-// run executes all plugins with handling for the command line.
+// run executes all plugins, prints a JSON/YAML summary to stdout, and returns an exit code.
 func (c *CLI) run() (exitCode int) {
 	c.setupCloseHandler()
-	return command.Run(c.logger, command.GetPlugins)
+	exitCode, results := command.Run(c.logger, command.GetPlugins)
+	c.printSummary(command.RunSummary{Results: results})
+	return exitCode
+}
+
+// printSummary marshals the run summary to stdout in the format specified by
+// the "output" config key (json by default, yaml if set to "yaml").
+func (c *CLI) printSummary(summary command.RunSummary) {
+	var (
+		data []byte
+		err  error
+	)
+	if viper.GetString("output") == "yaml" {
+		data, err = yaml.Marshal(summary)
+	} else {
+		data, err = json.MarshalIndent(summary, "", "  ")
+	}
+	if err != nil {
+		c.logger.Error("failed to marshal run summary", "error", err)
+		return
+	}
+	fmt.Fprintln(os.Stdout, string(data))
 }
 
 // setupCloseHandler creates a signal listener on a new goroutine which will notify

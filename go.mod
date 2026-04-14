@@ -8,6 +8,7 @@ require (
 	github.com/privateerproj/privateer-sdk v1.23.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -20,7 +21,7 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/gemaraproj/go-gemara v0.0.2 // indirect
+	github.com/gemaraproj/go-gemara v0.3.0 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.8.0 // indirect
 	github.com/go-git/go-git/v5 v5.17.2 // indirect
@@ -58,11 +59,10 @@ require (
 	google.golang.org/grpc v1.79.3 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 // For SDK Development Only
-// replace github.com/privateerproj/privateer-sdk => ../privateer-sdk
+replace github.com/privateerproj/privateer-sdk => ../privateer-sdk
 
 // Use local go-gemara when developing (same as privateer-sdk); replace is not transitive
 // replace github.com/gemaraproj/go-gemara => ../../gemaraproj/go-gemara
